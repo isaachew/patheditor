@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Path Editor</title>
+        <link rel="stylesheet" href="patheditor.css"></link>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="canvwrapper" tabindex="0">
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="sidebar">
+                <span id="coords"></span>
+                <div id="tools">
+                <button onclick="ctool='line'">Line</button>
+                <button onclick="ctool='bezier'">Bezier</button>
+                <button onclick="ctool='quadratic'">Quadratic</button>
+                </div>
+                
+                <div id="subpaths"></div>
+                <div id="commands"></div>
+                <textarea id="pathtxt"></textarea>
+            </div>
+        </div>
+	<script src="svgpaths.js"></script>
+        <script src="patheditor.js"></script>
+    </body>
+</html>

@@ -1,9 +1,22 @@
-#canvwrapper{
-    user-select:none;
-    float:left
+body{
+    position:fixed;
+    overflow:hidden;
+    height:100vh;
+    margin:0
+}
+#wrapper{
+    height:100vh;
+    width:100%;
+    display:flex
 }
 #canvwrapper:focus{
     outline:none
+}
+#canvwrapper,#sidebar{
+    flex-grow:1;
+    height:100%;
+    width:auto;
+    margin:0
 }
 #tools button{
     border:1px solid black;

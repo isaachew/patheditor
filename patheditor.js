@@ -1,5 +1,10 @@
 let canv=document.getElementById("canvas")
 let context=canv.getContext("2d")
+var dpr=window.devicePixelRatio
+canv.width=600*dpr
+canv.height=600*dpr
+canv.style.width="600px"
+context.scale(dpr,dpr)
 
 let view={topleft:[-300,-300],scale:1}
 let grprec=.1
@@ -42,18 +47,20 @@ let curpath
 //Smooth Bezier curve has a controls point opposite of the previous
 //Paths are delimited by moveTo or closePath or both (moveTo starts a subpath)
 function draw(){
-    context.clearRect(0,0,600,600)
     context.save()
+    context.clearRect(0,0,600,600)
     context.scale(view.scale,view.scale)
     context.translate(-view.topleft[0],-view.topleft[1])
     var spot=.2**Math.floor(Math.log(view.scale)/Math.log(5))
-    //gpatt.setTransform(new DOMMatrix([spot,0,0,spot,0,0]))
+    
     context.fillStyle=gpatt
     context.fillRect(view.topleft[0],view.topleft[1],600/view.scale,600/view.scale)
-    //context.fill(pth)
+    
+    /*
     context.fillStyle="#ccc"
     context.font="10px serif"
     context.fillText("d",0,0)
+    */
     context.fillStyle="red"
     context.strokeStyle="#bbb"
     context.lineWidth=3/view.scale
@@ -190,8 +197,8 @@ canv.addEventListener("mouseup",e=>{
 })
 
 canv.addEventListener("wheel",e=>{
-    
-    let sf=1.0003**e.deltaY
+    console.log("delta "+e.deltaY)
+    let sf=1.001**e.deltaY
     let tldc=[e.offsetX/view.scale*(1-sf),e.offsetY/view.scale*(1-sf)]
     view.topleft[0]+=tldc[0]
     view.topleft[1]+=tldc[1]
