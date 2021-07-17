@@ -1,0 +1,21 @@
+#canvwrapper{
+    user-select:none;
+    float:left
+}
+#canvwrapper:focus{
+    outline:none
+}
+#tools button{
+    border:1px solid black;
+    background:#bbb
+
+}
+#tools button:hover{
+    background:#ddd
+    
+    
+    
+    
+    
+    
+}
