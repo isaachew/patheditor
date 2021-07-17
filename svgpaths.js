@@ -23,8 +23,9 @@ function pto(path){
 		}
 		if(cnt==0){
 			let lc=subpath.length?subpath[subpath.length-1].to:subpath.start??[0,0]
+                         console.log("lc:",lc)
 			let rel=opcode==opcode.toLowerCase()
-			let relx=lc[0]*rel,rely=lc[1]*rel
+			let relx=rel?lc[0]:0,rely=rel?lc[1]:0
 			var relative=a=>[a[0]+relx,a[1]+rely]
 			console.log((rel?opcode.toLowerCase():opcode)+params)
 			switch(opcode.toLowerCase()){
@@ -45,7 +46,7 @@ function pto(path){
 				subpath.push({type:"line",to:[params[0]+relx,lc[1]]})
 				break
 				case "v":
-				subpath.push({type:"line",to:[lc[0]+rely,params[1]]})
+				subpath.push({type:"line",to:[lc[0],params[0]+rely]})
 				break
 				case "c":
 				subpath.push({type:"bezier",controls:[relative([params[0],params[1]]),relative([params[2],params[3]])],to:relative([params[4],params[5]])})
@@ -131,20 +132,12 @@ function otp(path){
 				break
 				case "arc":
 				anc("A",j.rx,j.ry,j.angle,+j.large,+j.sweep,...j.to)
-				
-				
-				
-				
-				
-				
-				
-				
-				
 			}
 			lx=j.to[0]
 			ly=j.to[1]
 			lp=j
 		}
+		if(i.closed)anc("Z")
 	}
 	return st
 }

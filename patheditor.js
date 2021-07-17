@@ -4,10 +4,11 @@ var dpr=window.devicePixelRatio
 canv.width=600*dpr
 canv.height=600*dpr
 canv.style.width="600px"
+canv.style.height="600px"
 context.scale(dpr,dpr)
 
 let view={topleft:[-300,-300],scale:1}
-let grprec=.1
+let grprec=1e-5
 
 
 
@@ -18,7 +19,7 @@ let gctx=grid.getContext("2d")
 gctx.strokeRect(0,0,100,100)
 var gpatt=context.createPattern(grid,"repeat")
 
-
+/*
 function tocc(path){
     let cst=""
     for(i of path){
@@ -41,8 +42,9 @@ function tocc(path){
     return cst
 }
 console.log(0)
+*/
 let cpath=pto("M-250 0L-200 0")
-//cpath=pto("M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z")
+cpath=pto("M 3.472-0.845V-3.149C 3.26144-4.66116 1.9479-4.4994 1.53977-3.75097S 1.1061-1.84056 1.56947-1.04511  2.98276-0.22648 3.472-0.845M 4.9692-0.586C 4.3047-0.3092 4.304-0.8216 4.291-1.0477L 4.2769-6.9428  4.0571-6.9437  2.7215-6.4  2.7860842847387843-6.2279729514855795C 3.5167593831214674-6.517138349007822 3.4313395965471973-5.943605496294865 3.4598165393974334-5.744266896343216L 3.4627600000000003-4.230090000000001C 2.30335-5.262110000000001 0.6854300000000001-4.04867 0.4283735752160188-2.7995855088225463  0.2830544226798004-2.0346035549054724 0.1859811811768992-0.2198801435378348 1.8705156212641636 0.11454612040968948  2.6485844246444237 0.25172308023597134 3.1213367449401974-0.12259887872733266 3.471972921798947-0.4934640657894711L 3.471088444617089 0.1322244254602578H 3.697440054208772L 5.024450310856594-0.415706584834447Z")
 let curpath
 //Smooth Bezier curve has a controls point opposite of the previous
 //Paths are delimited by moveTo or closePath or both (moveTo starts a subpath)
@@ -56,11 +58,11 @@ function draw(){
     context.fillStyle=gpatt
     context.fillRect(view.topleft[0],view.topleft[1],600/view.scale,600/view.scale)
     
-    /*
+    //*
     context.fillStyle="#ccc"
-    context.font="10px serif"
+    context.font="10px Times New Roman"
     context.fillText("d",0,0)
-    */
+    //*/
     context.fillStyle="red"
     context.strokeStyle="#bbb"
     context.lineWidth=3/view.scale
@@ -106,10 +108,11 @@ function draw(){
     context.stroke(pth)
     context.restore()
     document.getElementById("pathtxt").value=otp(cpath)
+    document.getElementById("scale").textContent=canv.width/view.scale
 }
 rtn=(n,r)=>r?Math.round(n/r)*r:n
 let subpath,selected=null,mousestate=false
-let ctool="line"
+let ctool;
 function getmxy(ev){return [ev.offsetX/view.scale+view.topleft[0],ev.offsetY/view.scale+view.topleft[1]]}
 canv.addEventListener("mousedown",e=>{
     selected=null;
@@ -212,6 +215,17 @@ canv.addEventListener("wheel",e=>{
     
     
 },{passive:true})
+
+addEventListener("resize",e=>{
+    console.log(innerWidth,innerHeight)
+    
+    
+    
+    draw()
+    
+    
+    
+})
 
 document.getElementById("canvwrapper").addEventListener("keydown",e=>{cpath[0].pop();draw()},{passive:true})
 
