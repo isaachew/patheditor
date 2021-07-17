@@ -57,7 +57,6 @@ function draw(){
     
     context.fillStyle=gpatt
     context.fillRect(view.topleft[0],view.topleft[1],600/view.scale,600/view.scale)
-    
     //*
     context.fillStyle="#ccc"
     context.font="10px Times New Roman"
@@ -108,7 +107,7 @@ function draw(){
     context.stroke(pth)
     context.restore()
     document.getElementById("pathtxt").value=otp(cpath)
-    document.getElementById("scale").textContent=canv.width/view.scale
+    document.getElementById("scale").textContent=600/view.scale
 }
 rtn=(n,r)=>r?Math.round(n/r)*r:n
 let subpath,selected=null,mousestate=false
@@ -240,5 +239,4 @@ document.getElementById("pathtxt").addEventListener("input",e=>{
 })
 
 draw()
-
 
