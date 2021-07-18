@@ -1,13 +1,10 @@
 let canv=document.getElementById("canvas")
 let context=canv.getContext("2d")
+
+let view={topleft:[-10,-10],scale:45,width:600,height:600}
 var dpr=window.devicePixelRatio
-canv.width=600*dpr
-canv.height=600*dpr
-canv.style.width="600px"
-canv.style.height="600px"
 context.scale(dpr,dpr)
 
-let view={topleft:[-300,-300],scale:1}
 let grprec=1e-5
 
 
@@ -18,7 +15,14 @@ grid.height=100
 let gctx=grid.getContext("2d")
 gctx.strokeRect(0,0,100,100)
 var gpatt=context.createPattern(grid,"repeat")
-
+function resizeCanvas(wid,hei){
+    view.width=wid
+    view.height=hei
+    canv.width=view.width*dpr
+    canv.height=view.height*dpr
+    canv.style.width=view.width+"px"
+    canv.style.height=view.height+"px"
+}
 /*
 function tocc(path){
     let cst=""
@@ -44,20 +48,20 @@ function tocc(path){
 console.log(0)
 */
 let cpath=pto("M-250 0L-200 0")
-cpath=pto("M 3.472-0.845V-3.149C 3.26144-4.66116 1.9479-4.4994 1.53977-3.75097S 1.1061-1.84056 1.56947-1.04511  2.98276-0.22648 3.472-0.845M 4.9692-0.586C 4.3047-0.3092 4.304-0.8216 4.291-1.0477L 4.2769-6.9428  4.0571-6.9437  2.7215-6.4  2.7860842847387843-6.2279729514855795C 3.5167593831214674-6.517138349007822 3.4313395965471973-5.943605496294865 3.4598165393974334-5.744266896343216L 3.4627600000000003-4.230090000000001C 2.30335-5.262110000000001 0.6854300000000001-4.04867 0.4283735752160188-2.7995855088225463  0.2830544226798004-2.0346035549054724 0.1859811811768992-0.2198801435378348 1.8705156212641636 0.11454612040968948  2.6485844246444237 0.25172308023597134 3.1213367449401974-0.12259887872733266 3.471972921798947-0.4934640657894711L 3.471088444617089 0.1322244254602578H 3.697440054208772L 5.024450310856594-0.415706584834447Z")
+cpath=pto("M3.472-.845V-3.149C3.2614-4.6612 1.9479-4.4994 1.5398-3.751S1.1061-1.8406 1.5695-1.0451 2.9828-.2265 3.472-.845M4.9692-.586C4.3047-.3092 4.304-.8216 4.291-1.0477L4.2769-6.9428H4.0571L2.7215-6.4 2.7861-6.228C3.5168-6.5171 3.4313-5.9436 3.4598-5.7443V-4.2301C2.3034-5.2621.6854-4.0487.4284-2.7996.2831-2.0346.186-.2199 1.8705.1145 2.6486.2517 3.1213-.1226 3.472-.4935L3.4711.1322H3.6974L5.0244-.4157Z")
 let curpath
 //Smooth Bezier curve has a controls point opposite of the previous
 //Paths are delimited by moveTo or closePath or both (moveTo starts a subpath)
 function draw(){
     context.save()
-    context.clearRect(0,0,600,600)
+    context.clearRect(0,0,view.width,view.height)
     context.scale(view.scale,view.scale)
     context.translate(-view.topleft[0],-view.topleft[1])
     var spot=.2**Math.floor(Math.log(view.scale)/Math.log(5))
     
     context.fillStyle=gpatt
-    context.fillRect(view.topleft[0],view.topleft[1],600/view.scale,600/view.scale)
-    //*
+    context.fillRect(view.topleft[0],view.topleft[1],view.width/view.scale,view.height/view.scale)
+    /*
     context.fillStyle="#ccc"
     context.font="10px Times New Roman"
     context.fillText("d",0,0)
@@ -107,7 +111,7 @@ function draw(){
     context.stroke(pth)
     context.restore()
     document.getElementById("pathtxt").value=otp(cpath)
-    document.getElementById("scale").textContent=600/view.scale
+    document.getElementById("scale").textContent=view.width/view.scale
 }
 rtn=(n,r)=>r?Math.round(n/r)*r:n
 let subpath,selected=null,mousestate=false
@@ -217,16 +221,17 @@ canv.addEventListener("wheel",e=>{
 
 addEventListener("resize",e=>{
     console.log(innerWidth,innerHeight)
-    
-    
-    
+    resizeCanvas(innerHeight,innerHeight)
     draw()
     
     
     
 })
 
-document.getElementById("canvwrapper").addEventListener("keydown",e=>{cpath[0].pop();draw()},{passive:true})
+document.getElementById("canvwrapper").addEventListener("keydown",e=>{
+    if(e.key=="Delete")cpath[0].pop()
+    draw()
+},{passive:true})
 
 document.getElementById("pathtxt").addEventListener("input",e=>{
     cpath=pto(e.target.value)
@@ -238,5 +243,6 @@ document.getElementById("pathtxt").addEventListener("input",e=>{
     
 })
 
+resizeCanvas(900,900)
 draw()
 

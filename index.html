@@ -11,6 +11,7 @@
             </div>
             <div id="sidebar">
                 <span id="coords"></span> Width: <span id="scale"></span>
+                Round to nearest: <input type="number" min="0" oninput="grprec=+this.value">
                 <div id="tools">
                 <button onclick="ctool='line'">Line</button>
                 <button onclick="ctool='bezier'">Bezier</button>
@@ -19,6 +20,9 @@
                 
                 <div id="subpaths"></div>
                 <div id="commands"></div>
+                <button onclick="expsvg(0)">Mix
+                <button onclick="expsvg(1)">Abs
+                <button onclick="expsvg(2)">Rel</button>
                 <textarea id="pathtxt"></textarea>
             </div>
         </div>
