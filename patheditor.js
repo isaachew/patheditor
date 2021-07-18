@@ -3,7 +3,6 @@ let context=canv.getContext("2d")
 
 let view={topleft:[-10,-10],scale:45,width:600,height:600}
 var dpr=window.devicePixelRatio
-context.scale(dpr,dpr)
 
 let grprec=1e-5
 
@@ -22,6 +21,7 @@ function resizeCanvas(wid,hei){
     canv.height=view.height*dpr
     canv.style.width=view.width+"px"
     canv.style.height=view.height+"px"
+    context.setTransform(dpr,0,0,dpr,0,0)
 }
 /*
 function tocc(path){
