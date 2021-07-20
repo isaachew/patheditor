@@ -79,6 +79,34 @@ function pto(path){
     if(subpath.length)curpath.push(subpath)
     return curpath
 }
+function revsp(subpath){
+    let newsp=[]
+    newsp.start=subpath[subpath.length-1].to
+    for(i=subpath.length-1;i>=0;i--){
+        let from=i?subpath[i-1].to:subpath.start
+        let cmd=subpath[i]
+        switch(cmd.type){
+        case "line":
+        newsp.push({type:"line",to:from})
+        
+        
+        break
+        case "bezier":
+        newsp.push({type:"bezier",to:from,controls:[cmd.controls[1],cmd.controls[0]]})
+        break
+        case "quadratic":
+        newsp.push({type:"quadratic",to:from,control:cmd.control})
+        break
+        case "arc":
+        newsp.push({type:"arc",to:from,what:what})
+        
+        
+        }
+        lc=i.to
+    }
+    
+    return newsp
+}
 function gsr(num){
     if(num==0)return "0"
     if(num%1000==0){
@@ -109,7 +137,7 @@ function otp(path){
             else if(st[st.length-1]==0&&srep[0]==0)st+="0"
             else st+=" "+srep
         }
-        lcu=a
+        lcu=a=="M"?"L":a
     }
     let aeq=(a,b)=>Math.abs(a-b)<0.001
     var lx,ly,lp={}
@@ -145,6 +173,27 @@ function otp(path){
         if(i.closed)anc("Z")
     }
     return st
+}
+function tocc(path){
+    let cst="ctx.beginPath()\n"
+    for(i of path){
+        cst+=`ctx.moveTo(${i.start})\n`
+        for(j of i){
+            switch(j.type){
+                case "line":cst+=`ctx.lineTo(${j.to})\n`
+                break
+                case "bezier":cst+=`ctx.bezierCurveTo(${j.controls},${j.to})\n`
+                break
+                case "quadratic":cst+=`ctx.quadraticCurveTo(${j.control},${j.to})\n`
+                break
+            
+            
+            
+            }    
+        }
+        if(cst.closed)cst+="ctx.closePath()\n"
+    }
+    return cst
 }
 function ptp(path){
     return new Path2D(pto(path))

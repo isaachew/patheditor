@@ -2,6 +2,8 @@ let canv=document.getElementById("canvas")
 let context=canv.getContext("2d")
 
 let view={topleft:[-10,-10],scale:45,width:600,height:600}
+let fill=false
+let fillrule=false//false = nonzero, true = evenodd
 var dpr=window.devicePixelRatio
 
 let grprec=1e-5
@@ -48,7 +50,7 @@ function tocc(path){
 console.log(0)
 */
 let cpath=pto("M-250 0L-200 0")
-cpath=pto("M3.472-.845V-3.149C3.2614-4.6612 1.9479-4.4994 1.5398-3.751S1.1061-1.8406 1.5695-1.0451 2.9828-.2265 3.472-.845M4.9692-.586C4.3047-.3092 4.304-.8216 4.291-1.0477L4.2769-6.9428H4.0571L2.7215-6.4 2.7861-6.228C3.5168-6.5171 3.4313-5.9436 3.4598-5.7443V-4.2301C2.3034-5.2621.6854-4.0487.4284-2.7996.2831-2.0346.186-.2199 1.8705.1145 2.6486.2517 3.1213-.1226 3.472-.4935L3.4711.1322H3.6974L5.0244-.4157Z")
+cpath=pto("M3.472-.845C2.9828-.2265 2.0329-.2496 1.5695-1.0451S1.1317-3.0026 1.5398-3.751 3.2614-4.6612 3.472-3.149V-.845M4.9692-.586C4.3047-.3092 4.304-.8216 4.291-1.0477L4.2769-6.9428H4.0571L2.7215-6.4 2.7861-6.228C3.5168-6.5171 3.4313-5.9436 3.4598-5.7443V-4.2301C2.3034-5.2621.6854-4.0487.4284-2.7996.2831-2.0346.186-.2199 1.8705.1145 2.6486.2517 3.1213-.1226 3.472-.4935L3.4711.1322H3.6974L5.0244-.4157Z")
 let curpath
 //Smooth Bezier curve has a controls point opposite of the previous
 //Paths are delimited by moveTo or closePath or both (moveTo starts a subpath)
@@ -66,6 +68,13 @@ function draw(){
     context.font="10px Times New Roman"
     context.fillText("d",0,0)
     //*/
+    context.strokeStyle="black"
+    context.fillStyle="lime"
+    pth=new Path2D(otp(cpath))
+    context.lineWidth=1.5/view.scale
+    if(fill)context.fill(pth,fillrule?"evenodd":"nonzero")
+    context.stroke(pth)
+    
     context.fillStyle="red"
     context.strokeStyle="#bbb"
     context.lineWidth=3/view.scale
@@ -105,10 +114,6 @@ function draw(){
     }
     context.fillStyle="#0f0"
     if(selected)drawpoint(...cpath[selected.subpath].start)
-    context.strokeStyle="black"
-    pth=new Path2D(otp(cpath))
-    context.lineWidth=1.5/view.scale
-    context.stroke(pth)
     context.restore()
     document.getElementById("pathtxt").value=otp(cpath)
     document.getElementById("scale").textContent=view.width/view.scale

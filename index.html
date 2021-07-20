@@ -10,13 +10,16 @@
                 <canvas id="canvas"></canvas>
             </div>
             <div id="sidebar">
-                <span id="coords"></span> Width: <span id="scale"></span>
+                <span id="coords"></span> Width: <span id="scale"></span><br>
+                Fill <input type="checkbox" oninput="fill=this.checked;draw()"><br>
+                Use even-odd rule instead of nonzero rule <input type="checkbox" oninput="fillrule=this.checked;draw()"><br>
                 Round to nearest: <input type="number" min="0" oninput="grprec=+this.value">
                 <div id="tools">
                 <button onclick="ctool='line'">Line</button>
                 <button onclick="ctool='bezier'">Bezier</button>
                 <button onclick="ctool='quadratic'">Quadratic</button>
                 </div>
+                <button onclick="cpath[0]=revsp(cpath[0]);draw()">Reverse subpath</button>
                 
                 <div id="subpaths"></div>
                 <div id="commands"></div>
