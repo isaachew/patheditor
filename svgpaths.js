@@ -134,7 +134,7 @@ function otp(path){
             if(i<0){st+="-"+gsr(-i);continue}
             let srep=gsr(i)
             if((srep[0]=="."&&/(\.\d+|e[+-]?\d+)$/i.test(st))||/[zmlhvcsqta]$/i.test(st))st+=srep
-            else if(st[st.length-1]==0&&srep[0]==0)st+="0"
+            //else if(st[st.length-1]==0&&srep[0]==0)st+="0"
             else st+=" "+srep
         }
         lcu=a=="M"?"L":a

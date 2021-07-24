@@ -118,16 +118,16 @@ function draw(){
     document.getElementById("pathtxt").value=otp(cpath)
     document.getElementById("scale").textContent=view.width/view.scale
 }
-rtn=(n,r)=>r?Math.round(n/r)*r:n
-let subpath,selected=null,mousestate=false
+rtn=(n,r)=>r?+(Math.round(n/r)*r).toFixed(12):n
+let subpath,selected={subpath:0},mousestate=false
 let ctool;
 function getmxy(ev){return [ev.offsetX/view.scale+view.topleft[0],ev.offsetY/view.scale+view.topleft[1]]}
 canv.addEventListener("mousedown",e=>{
-    selected=null;
+    selected={subpath:selected.subpath};
     [mcx,mcy]=getmxy(e)
     mousestate=1
     
-    let subpath=cpath[0]
+    let subpath=cpath[selected.subpath]
     var lcmd=subpath[subpath.length-1]
     var lc=subpath.length?lcmd.to:subpath.start
     var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.controls[1]:lcmd.type=="quadratic"?lcmd.control:lc:lc
@@ -148,9 +148,9 @@ canv.addEventListener("mousedown",e=>{
             }
             if(nearpoint(pcmd.to))selected={subpath:i,command:j,selection:"to"}
         }
-        if(nearpoint(cpath[i].start))selected={subpath:i,command:"start"}
+        if(nearpoint(cpath[i].start))selected={subpath:i,selection:"start"}
     }
-    if(selected)ctool=null
+    if(selected.selection)ctool=null
     draw()
 })
 canv.addEventListener("mousemove",e=>{
@@ -158,10 +158,10 @@ canv.addEventListener("mousemove",e=>{
     mcx=rtn(mcx,grprec)
     mcy=rtn(mcy,grprec)
     if(mousestate==1){
-        if(selected){
+        if(selected.selection){
             
             let subpath=cpath[selected.subpath]
-            if(selected.command=="start")subpath.start=[mcx,mcy]
+            if(selected.selection=="start")subpath.start=[mcx,mcy]
             else{
                 var lcmd=subpath[selected.command]
                 switch(selected.selection){
@@ -188,12 +188,12 @@ canv.addEventListener("mousemove",e=>{
 canv.addEventListener("mouseup",e=>{
     [mcx,mcy]=getmxy(e)
     
-    let subpath=cpath[0]
+    let subpath=cpath[selected.subpath]
     var lcmd=subpath[subpath.length-1]
     var lastPoint=subpath.length?lcmd.to:subpath.start
     var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.controls[1]:lcmd.type=="quadratic"?lcmd.control:lastPoint:lastPoint
     
-    if(!selected&&mousestate==1){
+    if(!selected.selection&&mousestate==1){
         switch(ctool){
             case "line":subpath.push({type:"line",to:[mcx,mcy]})
             break
@@ -234,18 +234,23 @@ addEventListener("resize",e=>{
 })
 
 document.getElementById("canvwrapper").addEventListener("keydown",e=>{
-    if(e.key=="Delete")cpath[0].pop()
+    if(e.key=="Delete")cpath[selected.subpath].pop()
     draw()
 },{passive:true})
 
 document.getElementById("pathtxt").addEventListener("input",e=>{
     cpath=pto(e.target.value)
-    selected=null
+    selected={subpath:0}
     draw()
     
     
     
     
+})
+
+document.getElementById("pclosed").addEventListener("input",e=>{
+	cpath[selected.subpath].closed=e.target.checked
+	draw()
 })
 
 resizeCanvas(900,900)
