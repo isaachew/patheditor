@@ -19,9 +19,9 @@
                 <button onclick="ctool='bezier'">Bezier</button>
                 <button onclick="ctool='quadratic'">Quadratic</button>
                 </div>
-                <button onclick="cpath[selected.subpath]=revsp(cpath[selected.subpath]);draw()">Reverse subpath</button>
-		<button onclick="selected={subpath:~-cpath.push(Object.assign([],{start:[0,0]}))};draw()">Add subpath</button>
-                <button onclick="cpath.splice(selected,1);selected={subpath:0};draw()">Delete subpath</button>
+		<button onclick="selected={subpath:~-cpath.push(Object.assign([],{start:[0,0]}))};draw()">Add subpath</button><br>
+                <button onclick="cpath[selected.subpath]=revsp(cpath[selected.subpath]);draw()">Reverse subpath</button><br>
+                <button onclick="cpath.splice(selected.subpath,1);selected={subpath:0};draw()">Delete subpath</button>
                 
                 <div id="subpaths">Subpath <input type="number" onclick="subpath=+this.value"><br>
 		Closed <input type="checkbox" id="pclosed"></div>
