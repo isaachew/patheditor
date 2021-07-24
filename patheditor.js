@@ -141,7 +141,7 @@ function cfsels(){
 	document.getElementById("commands").textContent=JSON.stringify(selected)
 	
 	subpaths()
-	document.getElementById("subp"+selected.subpath).className="selected"
+	document.getElementById("subp"+selected.subpath).classList.add("selected")
 	
 	
 	
