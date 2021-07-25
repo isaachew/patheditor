@@ -23,8 +23,8 @@
                 <button onclick="curpath[selected.subpath]=revsp(curpath[selected.subpath]);draw()">Reverse subpath</button><br>
                 <button onclick="curpath.splice(selected.subpath,1);selected={subpath:0};draw()">Delete subpath</button>
                 
-                <div id="subpaths">Subpath <input type="number" onclick="subpath=+this.value"><br>
-		Closed <input type="checkbox" id="pclosed"></div>
+                <div id="subpaths">Subpath <input type="number" onclick="subpath=+this.value"></div>
+		Closed <input type="checkbox" id="pclosed">
                 <div id="commands"></div>
                 <button onclick="expsvg(0)">Mix
                 <button onclick="expsvg(1)">Abs

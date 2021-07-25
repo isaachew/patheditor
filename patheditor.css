@@ -20,8 +20,6 @@ body{
 }
 #sidebar{
     width:auto
-    
-    
 }
 
 #tools button{
@@ -35,9 +33,8 @@ body{
 
 #subpaths .subpathlist{
     height:32px;
-    width:100%
-    
-    
+    width:100%;
+    line-height:32px
 }
 #subpaths .selected{
     background:#eee
