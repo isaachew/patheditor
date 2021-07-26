@@ -50,7 +50,7 @@ function tocc(path){
 console.log(0)
 */
 let curpath=pto("M-250 0L-200 0")
-curpath=pto("M3.472-.845C2.9828-.2265 2.0329-.2496 1.5695-1.0451S1.1317-3.0026 1.5398-3.751 3.2614-4.6612 3.472-3.149V-.845M4.9692-.586C4.3047-.3092 4.304-.8216 4.291-1.0477L4.2769-6.9428H4.0571L2.7215-6.4 2.7861-6.228C3.5168-6.5171 3.4313-5.9436 3.4598-5.7443V-4.2301C2.3034-5.2621.6854-4.0487.4284-2.7996.2831-2.0346.186-.2199 1.8705.1145 2.6486.2517 3.1213-.1226 3.472-.4935L3.4711.1322H3.6974L5.0244-.4157ZM6 0V-6.8L6.8-7V-3.8C7.6-4.6 9.4-4.4 9.4-2.6V0H8.6V-2.8C8.6-3.4 7.2-3.6 6.8-2.8V0Z")
+curpath=pto("M3.472-.845C2.9828-.2265 2.0329-.2496 1.5695-1.0451S1.1317-3.0026 1.5398-3.751 3.2614-4.6612 3.472-3.149V-.845M4.9692-.586C4.3047-.3092 4.304-.8216 4.291-1.0477L4.2769-6.9428H4.0571L2.7215-6.4 2.7861-6.228C3.5168-6.5171 3.4313-5.9436 3.4598-5.7443V-4.2301C2.3034-5.2621.6854-4.0487.4284-2.7996.2831-2.0346.186-.2199 1.8705.1145 2.6486.2517 3.1213-.1226 3.472-.4935L3.4711.1322H3.6974L5.0244-.4157ZM6 0V-6.8L6.8-7V-3.8C7.6-4.6 9.2-4.4 9.2-2.6V0H8.4V-3C8.4-3.6 7.6-4 6.8-3.2V0Z")
 //Smooth Bezier curve has a controls point opposite of the previous
 //Paths are delimited by moveTo or closePath or both (moveTo starts a subpath)
 function draw(){
@@ -112,7 +112,12 @@ function draw(){
         
     }
     context.fillStyle="#0f0"
-    if(selected)drawpoint(...curpath[selected.subpath].start)
+    if(!selected.selection){
+        var p2d=new Path2D(otp([curpath[selected.subpath]]))
+        context.strokeStyle="#000"
+        context.stroke(p2d)
+        
+    }
     context.restore()
     document.getElementById("pathtxt").value=otp(curpath)
     document.getElementById("scale").textContent=view.width/view.scale
@@ -121,7 +126,7 @@ function draw(){
     
 }
 function subpaths(){
-	document.getElementById("subpaths").innerHTML=""
+    document.getElementById("subpaths").innerHTML=""
     for(var i=0;i<curpath.length;i++){    
 		var dv=document.createElement("div")
 		dv.className="subpathlist"
@@ -161,7 +166,7 @@ canv.addEventListener("mousedown",e=>{
     var lcmd=subpath[subpath.length-1]
     var lc=subpath.length?lcmd.to:subpath.start
     var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.controls[1]:lcmd.type=="quadratic"?lcmd.control:lc:lc
-    nearpoint=(a,b=[mcx,mcy])=>Math.hypot(a[0]-b[0],a[1]-b[1])<20/view.scale
+    nearpoint=(a,b=[mcx,mcy])=>Math.hypot(a[0]-b[0],a[1]-b[1])<=7.5/view.scale
     for(i=0;i<curpath.length;i++){
         for(j=0;j<curpath[i].length;j++){
             let pcmd=curpath[i][j]
@@ -216,7 +221,7 @@ canv.addEventListener("mousemove",e=>{
     draw()
 })
 
-canv.addEventListener("mouseup",e=>{
+canv.addEventListener("click",e=>{
     [mcx,mcy]=getmxy(e)
     
     let subpath=curpath[selected.subpath]
@@ -233,6 +238,17 @@ canv.addEventListener("mouseup",e=>{
             case "quadratic":
             subpath.push({type:"quadratic",control:[2*lastPoint[0]-lastControl[0],2*lastPoint[1]-lastControl[1]],to:[mcx,mcy]})
         }
+    }
+    if(!selected.selection){
+		for(let i=0;i<curpath.length;i++){
+			var p2d=new Path2D(otp([curpath[i]]))
+			context.lineWidth=10/view.scale
+			if(context.isPointInStroke(p2d,mcx,mcy)){
+				selected={subpath:i}
+
+			}
+
+		}
     }
     mousestate=0
     draw()
