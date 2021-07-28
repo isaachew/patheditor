@@ -273,7 +273,7 @@ canv.addEventListener("wheel",e=>{
 
 addEventListener("resize",e=>{
     console.log(innerWidth,innerHeight)
-    resizeCanvas(innerHeight,innerHeight)
+    resizeCanvas(innerWidth*2/3,innerHeight)
     draw()
     
     
