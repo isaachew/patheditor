@@ -30,7 +30,10 @@ body{
 #tools button:hover{
     background:#ddd
 }
-
+#subpaths{
+    height:200px;
+    overflow-y:auto
+}
 #subpaths .subpathlist{
     height:32px;
     width:100%;
