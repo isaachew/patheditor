@@ -24,6 +24,7 @@ function resizeCanvas(wid,hei){
     canv.height=view.height*dpr
     canv.style.width=view.width+"px"
     canv.style.height=view.height+"px"
+    document.getElementById("canvwrapper").style.width=wid+"px"
     context.setTransform(dpr,0,0,dpr,0,0)
 }
 /*

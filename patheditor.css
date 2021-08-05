@@ -4,6 +4,7 @@ body{
     width:100%;
     height:100vh;
     margin:0;
+    font-family:sans-serif
 }
 #wrapper{
     height:100vh;
@@ -14,12 +15,11 @@ body{
     outline:none
 }
 #canvwrapper,#sidebar{
-    flex-grow:1;
     height:100%;
     margin:0
 }
 #sidebar{
-    width:auto
+    flex-grow:1
 }
 
 #tools button{
