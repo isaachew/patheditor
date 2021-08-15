@@ -42,3 +42,8 @@ body{
 #subpaths .selected{
     background:#eee
 }
+#pathtxt{
+    width:90%;
+    height:20%;
+    resize:none;
+}

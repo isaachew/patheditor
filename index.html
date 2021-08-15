@@ -15,21 +15,17 @@
                 Use even-odd rule instead of nonzero rule <input type="checkbox" oninput="fillrule=this.checked;draw()"><br>
                 Round to nearest: <input type="number" min="0" oninput="grprec=+this.value">
                 <div id="tools">
-                <button onclick="ctool='line'">Line</button>
-                <button onclick="ctool='bezier'">Bezier</button>
-                <button onclick="ctool='quadratic'">Quadratic</button>
+                    <button onclick="ctool='line'">Line</button>
+                    <button onclick="ctool='bezier'">Bezier</button>
+                    <button onclick="ctool='quadratic'">Quadratic</button>
                 </div>
 		<button onclick="selected={subpath:~-curpath.push(Object.assign([],{start:[0,0]}))};draw()">Add subpath</button><br>
                 <button onclick="curpath[selected.subpath]=revsp(curpath[selected.subpath]);draw()">Reverse subpath</button><br>
                 <button onclick="curpath.splice(selected.subpath,1);selected={subpath:0};draw()">Delete subpath</button>
                 
                 <div id="subpaths">Subpath <input type="number" onclick="subpath=+this.value"></div>
-		Closed <input type="checkbox" id="pclosed">
-                <div id="commands"></div>
-                <div id="ccommand"></div>
-                <button onclick="expsvg(0)">Mix
-                <button onclick="expsvg(1)">Abs
-                <button onclick="expsvg(2)">Rel</button>
+		Close subpath <input type="checkbox" id="pclosed"><br>
+                <input type="number" class="num" id="px"><br>
                 <textarea id="pathtxt"></textarea>
             </div>
         </div>
