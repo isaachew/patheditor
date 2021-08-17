@@ -13,7 +13,7 @@
                 <span id="coords"></span> Width: <span id="scale"></span><br>
                 Fill <input type="checkbox" oninput="fill=this.checked;draw()"><br>
                 Use even-odd rule instead of nonzero rule <input type="checkbox" oninput="fillrule=this.checked;draw()"><br>
-                Round to nearest: <input type="number" min="0" oninput="grprec=+this.value">
+                Round to nearest: <input type="number" class="num" min="0" oninput="grprec=+this.value">
                 <div id="tools">
                     <button onclick="ctool='line'">Line</button>
                     <button onclick="ctool='bezier'">Bezier</button>
@@ -23,9 +23,9 @@
                 <button onclick="curpath[selected.subpath]=revsp(curpath[selected.subpath]);draw()">Reverse subpath</button><br>
                 <button onclick="curpath.splice(selected.subpath,1);selected={subpath:0};draw()">Delete subpath</button>
                 
-                <div id="subpaths">Subpath <input type="number" onclick="subpath=+this.value"></div>
+                <div id="subpaths"></div>
 		Close subpath <input type="checkbox" id="pclosed"><br>
-                <input type="number" class="num" id="px"><br>
+                <input type="number" class="num" id="px"><input type="number" class="num" id="py"><br>
                 <textarea id="pathtxt"></textarea>
             </div>
         </div>
