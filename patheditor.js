@@ -161,7 +161,7 @@ function cfsels(){
 	
 	
 }
-rtn=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(12)
+rtn=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(10)
 let subpath,selected={subpath:0},mousestate=false
 let ctool;
 function getmxy(ev){return [ev.offsetX/view.scale+view.topleft[0],ev.offsetY/view.scale+view.topleft[1]]}
@@ -322,5 +322,6 @@ document.getElementById("pclosed").addEventListener("input",e=>{
 })
 
 resizeCanvas(900,900)
+cfsels()
 draw()
 
