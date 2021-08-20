@@ -50,12 +50,12 @@ function pto(path){
                 subpath.push({type:"line",to:[lc[0],params[0]+rely]})
                 break
                 case "c":
-                subpath.push({type:"bezier",controls:[relative([params[0],params[1]]),relative([params[2],params[3]])],to:relative([params[4],params[5]])})
+                subpath.push({type:"bezier",c1:relative([params[0],params[1]]),c2:relative([params[2],params[3]]),to:relative([params[4],params[5]])})
                 break
                 case "s":
                 var lcmd=subpath[subpath.length-1]
-                var lbcc=lcmd.type=="bezier"?lcmd.controls[1]:lc
-                subpath.push({type:"bezier",controls:[[2*lc[0]-lbcc[0],2*lc[1]-lbcc[1]],relative([params[0],params[1]])],to:relative([params[2],params[3]])})
+                var lbcc=lcmd.type=="bezier"?lcmd.c2:lc
+                subpath.push({type:"bezier",c1:[2*lc[0]-lbcc[0],2*lc[1]-lbcc[1]],c2:relative([params[0],params[1]]),to:relative([params[2],params[3]])})
                 break
                 case "q":
                 subpath.push({type:"quadratic",control:relative([params[0],params[1]]),to:relative([params[2],params[3]])})
@@ -92,7 +92,7 @@ function revsp(subpath){
         
         break
         case "bezier":
-        newsp.push({type:"bezier",to:from,controls:[cmd.controls[1],cmd.controls[0]]})
+        newsp.push({type:"bezier",to:from,c1:cmd.c2,c2:cmd.c1})
         break
         case "quadratic":
         newsp.push({type:"quadratic",to:from,control:cmd.control})
@@ -154,9 +154,9 @@ function otp(path){
                 else anc("L",...j.to)
                 break
                 case "bezier":
-                var ref=lp.type=="bezier"?[2*lx-lp.controls[1][0],2*ly-lp.controls[1][1]]:[lx,ly]
-                if(aeq(j.controls[0][0],ref[0])&&aeq(j.controls[0][1],ref[1]))anc("S",...j.controls[1],...j.to)
-                else anc("C",...j.controls[0],...j.controls[1],...j.to)
+                var ref=lp.type=="bezier"?[2*lx-lp.c2[0],2*ly-lp.c2[1]]:[lx,ly]
+                if(aeq(j.c1[0],ref[0])&&aeq(j.c1[1],ref[1]))anc("S",...j.c2,...j.to)
+                else anc("C",...j.c1,...j.c2,...j.to)
                 break
                 case "quadratic":
                 var ref=lp.type=="quadratic"?[2*lx-lp.control[0],2*ly-lp.control[1]]:[lx,ly]
@@ -182,7 +182,7 @@ function tocc(path){
             switch(j.type){
                 case "line":cst+=`ctx.lineTo(${j.to})\n`
                 break
-                case "bezier":cst+=`ctx.bezierCurveTo(${j.controls},${j.to})\n`
+                case "bezier":cst+=`ctx.bezierCurveTo(${j.c1},${j.c2},${j.to})\n`
                 break
                 case "quadratic":cst+=`ctx.quadraticCurveTo(${j.control},${j.to})\n`
                 break

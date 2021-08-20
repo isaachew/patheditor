@@ -36,7 +36,7 @@ function tocc(path){
             switch(j.type){
                 case "line":cst+=`ctx.lineTo(${j.to})\n`
                 break
-                case "bezier":cst+=`ctx.bezierCurveTo(${j.controls},${j.to})\n`
+                case "bezier":cst+=`ctx.bezierCurveTo(${j.c1},${j.c2},${j.to})\n`
                 break
                 case "quadratic":cst+=`ctx.quadraticCurveTo(${j.control},${j.to})\n`
                 break
@@ -88,13 +88,13 @@ function draw(){
             if(j.type=="bezier"){
                 context.beginPath()
                 context.moveTo(...lp)
-                context.lineTo(...j.controls[0])
-                context.moveTo(...j.controls[1])
+                context.lineTo(...j.c1)
+                context.moveTo(...j.c2)
                 context.lineTo(...j.to)
                 context.stroke()
-                drawpoint(...j.controls[0])
+                drawpoint(...j.c1)
                 
-                drawpoint(...j.controls[1])
+                drawpoint(...j.c2)
             }else if(j.type=="quadratic"){
                 context.beginPath()
                 context.moveTo(...lp)
@@ -106,8 +106,8 @@ function draw(){
                 
                 
             }
-            //context.fillRect(j.controls[0][0]-2.5,j.controls[0][1]-2.5,5,5)
-            //context.fillRect(j.controls[1][0]-2.5,j.controls[1][1]-2.5,5,5)
+            //context.fillRect(j.c1[0]-2.5,j.c1[1]-2.5,5,5)
+            //context.fillRect(j.c2[0]-2.5,j.c2[1]-2.5,5,5)
             lp=j.to
         }
         
@@ -174,14 +174,14 @@ canv.addEventListener("mousedown",e=>{
     let subpath=curpath[selected.subpath]
     var lcmd=subpath[subpath.length-1]
     var lc=subpath.length?lcmd.to:subpath.start
-    var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.controls[1]:lcmd.type=="quadratic"?lcmd.control:lc:lc
+    var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.c2:lcmd.type=="quadratic"?lcmd.control:lc:lc
     nearpoint=(a,b=[mcx,mcy])=>Math.hypot(a[0]-b[0],a[1]-b[1])<=7.5/view.scale
     for(i=0;i<curpath.length;i++){
         for(j=0;j<curpath[i].length;j++){
             let pcmd=curpath[i][j]
             var sels
             switch(pcmd.type){
-                case "bezier":sels={c1:pcmd.controls[0],c2:pcmd.controls[1]}
+                case "bezier":sels={c1:pcmd.c1,c2:pcmd.c2}
                 break
                 case "quadratic":sels={control:pcmd.control}
                 break
@@ -224,9 +224,9 @@ canv.addEventListener("mousemove",e=>{
             else{
                 var lcmd=subpath[selected.command]
                 switch(selected.selection){
-                    case "c1":lcmd.controls[0]=[mcx,mcy]
+                    case "c1":lcmd.c1=[mcx,mcy]
                     break
-                    case "c2":lcmd.controls[1]=[mcx,mcy]
+                    case "c2":lcmd.c2=[mcx,mcy]
                     break
                     case "control":lcmd.control=[mcx,mcy]
                     break
@@ -243,16 +243,16 @@ canv.addEventListener("click",e=>{
     [mcx,mcy]=getmxy(e)
     
     let subpath=curpath[selected.subpath]
-    var lcmd=subpath[subpath.length-1]
+    var lcmd=subpath[selected.command||0]
     var lastPoint=subpath.length?lcmd.to:subpath.start
-    var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.controls[1]:lcmd.type=="quadratic"?lcmd.control:lastPoint:lastPoint
+    var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.c2:lcmd.type=="quadratic"?lcmd.control:lastPoint:lastPoint
     console.log(mousestate)
     if(mousestate==1){
         var ncmd
         switch(ctool){
             case "line":ncmd={type:"line",to:[mcx,mcy]}
             break
-            case "bezier":ncmd={type:"bezier",controls:[[2*lastPoint[0]-lastControl[0],2*lastPoint[1]-lastControl[1]],[mcx,mcy]],to:[mcx,mcy]}
+            case "bezier":ncmd={type:"bezier",c1:[2*lastPoint[0]-lastControl[0],2*lastPoint[1]-lastControl[1]],c2:[mcx,mcy],to:[mcx,mcy]}
             break
             case "quadratic":ncmd={type:"quadratic",control:[2*lastPoint[0]-lastControl[0],2*lastPoint[1]-lastControl[1]],to:[mcx,mcy]}
         }
@@ -303,7 +303,11 @@ addEventListener("resize",e=>{
 })
 
 document.getElementById("canvwrapper").addEventListener("keydown",e=>{
-    if(e.key=="Backspace")curpath[selected.subpath].splice(selected.command??-1,1)
+    if(e.key=="Backspace"){
+        curpath[selected.subpath].splice(selected.command??-1,1)
+        selected.command--
+        selected.selection="to"
+    }
     draw()
 },{passive:true})
 
