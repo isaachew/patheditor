@@ -223,16 +223,7 @@ canv.addEventListener("mousemove",e=>{
             if(selected.selection=="start")subpath.start=[mcx,mcy]
             else{
                 var lcmd=subpath[selected.command]
-                switch(selected.selection){
-                    case "c1":lcmd.c1=[mcx,mcy]
-                    break
-                    case "c2":lcmd.c2=[mcx,mcy]
-                    break
-                    case "control":lcmd.control=[mcx,mcy]
-                    break
-                    case "to":lcmd.to=[mcx,mcy]
-                    break
-                }
+                lcmd[selected.selection]=[mcx,mcy]
             }
     }
     document.getElementById("coords").textContent="Coordinates: ("+[mcx,mcy]+")"
