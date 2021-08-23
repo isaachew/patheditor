@@ -120,7 +120,7 @@ function draw(){
         context.stroke(p2d)
     }
     context.fillStyle="#07f"
-    drawpoint(...curpath[selected.subpath][curpath[selected.subpath].length-1].to)
+    if(curpath[selected.subpath].length)drawpoint(...curpath[selected.subpath][curpath[selected.subpath].length-1].to)
     
     
     context.fillStyle="#f70"
@@ -295,9 +295,14 @@ addEventListener("resize",e=>{
 
 document.getElementById("canvwrapper").addEventListener("keydown",e=>{
     if(e.key=="Backspace"){
-        curpath[selected.subpath].splice(selected.command??-1,1)
-        selected.command--
-        selected.selection="to"
+        if(curpath[selected.subpath].length){
+            curpath[selected.subpath].splice(selected.command??-1,1)
+            selected.command--
+            selected.selection="to"
+        }else{
+            curpath.splice(selected.subpath,1)
+            selected={subpath:0}
+        }
     }
     draw()
 },{passive:true})
