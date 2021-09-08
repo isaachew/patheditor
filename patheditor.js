@@ -130,8 +130,8 @@ function draw(){
     document.getElementById("pathtxt").value=otp(curpath)
     document.getElementById("scale").textContent=view.width/view.scale
     
-    document.getElementById("px").value=curpath[selected.subpath].start[0]
-    document.getElementById("py").value=curpath[selected.subpath].start[1]
+    document.getElementById("px").value=getselection()[0]
+    document.getElementById("py").value=getselection()[1]
     
 }
 function subpaths(){
@@ -166,6 +166,7 @@ let roundto=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(10)
 let subpath,selected={subpath:0},mousestate=false
 let ctool;
 function getmxy(ev){return [ev.offsetX/view.scale+view.topleft[0],ev.offsetY/view.scale+view.topleft[1]]}
+function getselection(){return curpath[selected.subpath][selected.command][selected.selection]}
 canv.addEventListener("mousedown",e=>{
     //selected={subpath:selected.subpath};
     [mcx,mcy]=getmxy(e)
@@ -181,14 +182,14 @@ canv.addEventListener("mousedown",e=>{
             let pcmd=curpath[i][j]
             var sels
             switch(pcmd.type){
-                case "bezier":sels={c1:pcmd.c1,c2:pcmd.c2}
+                case "bezier":sels=["c1","c2"]
                 break
-                case "quadratic":sels={control:pcmd.control}
+                case "quadratic":sels=["control"]
                 break
-                case "line":sels={}
+                case "line":sels=[]
             }
-            for(var sel in sels){
-                if(nearpoint(sels[sel])){
+            for(var sel of sels){
+                if(nearpoint(pcmd[sel])){
                     selected={subpath:i,command:j,selection:sel}
                     mousestate=3
                 }
@@ -319,6 +320,16 @@ document.getElementById("pathtxt").addEventListener("input",e=>{
 
 document.getElementById("pclosed").addEventListener("input",e=>{
     curpath[selected.subpath].closed=e.target.checked
+    draw()
+})
+
+document.getElementById("px").addEventListener("input",e=>{
+    getselection()[0]=e.target.value
+    draw()
+})
+
+document.getElementById("py").addEventListener("input",e=>{
+    getselection()[1]=e.target.value
     draw()
 })
 
