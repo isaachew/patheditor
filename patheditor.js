@@ -137,29 +137,29 @@ function draw(){
 function subpaths(){
     document.getElementById("subpaths").innerHTML=""
     for(var i=0;i<curpath.length;i++){    
-		var dv=document.createElement("div")
-		dv.className="subpathlist"
-		dv.id="subp"+i
-		dv.addEventListener("click",function(){
-			selected={subpath:+this.id.slice(4)}
-			cfsels()
-			draw()
-		})
-		var spn=document.createElement("span")
-		spn.append("Subpath "+-~i)
-		dv.append(spn)
-		document.getElementById("subpaths").append(dv)
+        var dv=document.createElement("div")
+        dv.className="subpathlist"
+        dv.id="subp"+i
+        dv.addEventListener("click",function(){
+            selected={subpath:+this.id.slice(4)}
+            cfsels()
+            draw()
+        })
+        var spn=document.createElement("span")
+        spn.append("Subpath "+-~i)
+        dv.append(spn)
+        document.getElementById("subpaths").append(dv)
     }
 }
 function cfsels(){
-	//document.getElementById("commands").textContent=JSON.stringify(selected)
-	
-	subpaths()
-	document.getElementById("subp"+selected.subpath).classList.add("selected")
-	document.getElementById("px").value=curpath[selected.subpath].start[0]
-	document.getElementById("py").value=curpath[selected.subpath].start[1]
-	
-	
+    //document.getElementById("commands").textContent=JSON.stringify(selected)
+    
+    subpaths()
+    document.getElementById("subp"+selected.subpath).classList.add("selected")
+    document.getElementById("px").value=curpath[selected.subpath].start[0]
+    document.getElementById("py").value=curpath[selected.subpath].start[1]
+    
+    
 }
 
 let roundto=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(10)
@@ -253,15 +253,15 @@ canv.addEventListener("click",e=>{
         }
     }
     if(!selected.selection){
-		for(let i=0;i<curpath.length;i++){
-			var p2d=new Path2D(otp([curpath[i]]))
-			context.lineWidth=10/view.scale
-			if(context.isPointInStroke(p2d,mcx,mcy)){
-				selected={subpath:i}
+        for(let i=0;i<curpath.length;i++){
+            var p2d=new Path2D(otp([curpath[i]]))
+            context.lineWidth=10/view.scale
+            if(context.isPointInStroke(p2d,mcx,mcy)){
+                selected={subpath:i}
 
-			}
+            }
 
-		}
+        }
     }
     mousestate=0
     draw()
@@ -318,8 +318,8 @@ document.getElementById("pathtxt").addEventListener("input",e=>{
 })
 
 document.getElementById("pclosed").addEventListener("input",e=>{
-	curpath[selected.subpath].closed=e.target.checked
-	draw()
+    curpath[selected.subpath].closed=e.target.checked
+    draw()
 })
 
 
