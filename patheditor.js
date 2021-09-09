@@ -166,7 +166,7 @@ let roundto=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(10)
 let subpath,selected={subpath:0},mousestate=false
 let ctool;
 function getmxy(ev){return [ev.offsetX/view.scale+view.topleft[0],ev.offsetY/view.scale+view.topleft[1]]}
-function getselection(){return curpath[selected.subpath][selected.command][selected.selection]}
+function getselection(){return selected.selection=="start"?curpath[selected.subpath].start:curpath[selected.subpath][selected.command][selected.selection]}
 canv.addEventListener("mousedown",e=>{
     //selected={subpath:selected.subpath};
     [mcx,mcy]=getmxy(e)
