@@ -298,8 +298,10 @@ document.getElementById("canvwrapper").addEventListener("keydown",e=>{
     if(e.key=="Backspace"){
         if(curpath[selected.subpath].length){
             curpath[selected.subpath].splice(selected.command??-1,1)
-            selected.command--
-            selected.selection="to"
+            if(selected.command){
+                selected.command--
+                selected.selection="to"
+            }else selected.command="start"
         }else{
             curpath.splice(selected.subpath,1)
             selected={subpath:0}
