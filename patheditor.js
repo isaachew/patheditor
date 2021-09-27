@@ -129,9 +129,11 @@ function draw(){
     context.restore()
     document.getElementById("pathtxt").value=otp(curpath)
     document.getElementById("scale").textContent=view.width/view.scale
-    
-    document.getElementById("px").value=getselection()[0]
-    document.getElementById("py").value=getselection()[1]
+    let sel=getselection()
+    if(sel){
+        document.getElementById("px").value=sel[0]
+        document.getElementById("py").value=sel[1]
+    }
     
 }
 function subpaths(){
@@ -156,17 +158,28 @@ function cfsels(){
     
     subpaths()
     document.getElementById("subp"+selected.subpath).classList.add("selected")
-    document.getElementById("px").value=curpath[selected.subpath].start[0]
-    document.getElementById("py").value=curpath[selected.subpath].start[1]
     
     
 }
 
 let roundto=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(10)
-let subpath,selected={subpath:0},mousestate=false
+let subpath,selected={subpath:0}
+let mousestate=0
+/*
+0: None
+1: Mouse down
+2: Panning
+3: Dragging selected point
+*/
 let ctool;
 function getmxy(ev){return [ev.offsetX/view.scale+view.topleft[0],ev.offsetY/view.scale+view.topleft[1]]}
-function getselection(){return selected.selection=="start"?curpath[selected.subpath].start:curpath[selected.subpath][selected.command][selected.selection]}
+function getselection(){
+    if(selected.selection=="start"){
+        return curpath[selected.subpath].start
+    }else if(selected.selection){
+        return curpath[selected.subpath][selected.command][selected.selection]
+    }else return null
+}
 canv.addEventListener("mousedown",e=>{
     //selected={subpath:selected.subpath};
     [mcx,mcy]=getmxy(e)
@@ -177,6 +190,7 @@ canv.addEventListener("mousedown",e=>{
     var lc=subpath.length?lcmd.to:subpath.start
     var lastControl=subpath.length?lcmd.type=="bezier"?lcmd.c2:lcmd.type=="quadratic"?lcmd.control:lc:lc
     nearpoint=(a,b=[mcx,mcy])=>Math.hypot(a[0]-b[0],a[1]-b[1])<=7.5/view.scale
+    //Determine selection
     for(i=0;i<curpath.length;i++){
         for(j=0;j<curpath[i].length;j++){
             let pcmd=curpath[i][j]
@@ -335,8 +349,6 @@ document.getElementById("py").addEventListener("input",e=>{
     draw()
 })
 
-
 resizeCanvas(innerWidth*2/3,innerHeight)
 cfsels()
 draw()
-
