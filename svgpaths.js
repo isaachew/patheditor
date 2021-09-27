@@ -1,6 +1,6 @@
 function pto(path){
-    let numregex=/[+-]?(([1-9]\d*|0)(\.\d*)?|\.\d+)(e[+-]?\d+)?/g
-    let letters="zmlhvcsqta"
+    let numregex=/[+-]?((\d+|0)(\.\d*)?|\.\d+)(e[+-]?\d+)?/g
+    let letters="mlhvcsqtaz"
     path=path.match(new RegExp(`(${numregex.source})|[${letters}]`,"gi"))
     console.log(path)
     let curpath=[]
@@ -79,6 +79,7 @@ function pto(path){
     if(subpath.length)curpath.push(subpath)
     return curpath
 }
+
 function revsp(subpath){
     let newsp=[]
     newsp.start=subpath[subpath.length-1].to
@@ -88,8 +89,6 @@ function revsp(subpath){
         switch(cmd.type){
         case "line":
         newsp.push({type:"line",to:from})
-        
-        
         break
         case "bezier":
         newsp.push({type:"bezier",to:from,c1:cmd.c2,c2:cmd.c1})
@@ -99,14 +98,13 @@ function revsp(subpath){
         break
         case "arc":
         newsp.push({type:"arc",to:from,what:what})
-        
-        
         }
         lc=i.to
     }
-    
+    newsp.closed=subpath.closed
     return newsp
 }
+
 function gsr(num){
     if(num==0)return "0"
     if(num%1000==0){
@@ -125,6 +123,7 @@ function gsr(num){
     if(num<1)return (""+num).slice(1)
     return ""+num
 }
+
 function otp(path){
     var st="",lcu=""
     function anc(a,...p){
@@ -146,7 +145,6 @@ function otp(path){
         lx=i.start[0]
         ly=i.start[1]
         for(var j of i){
-            
             switch(j.type){
                 case "line":
                 if(j.to[0]==lx)anc("V",j.to[1])
@@ -174,6 +172,7 @@ function otp(path){
     }
     return st
 }
+
 function tocc(path){
     let cst="ctx.beginPath()\n"
     for(i of path){
@@ -195,6 +194,7 @@ function tocc(path){
     }
     return cst
 }
+
 function ptp(path){
     return new Path2D(pto(path))
 }
