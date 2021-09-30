@@ -200,7 +200,8 @@ canv.addEventListener("mousedown",e=>{
                 break
                 case "quadratic":sels=["control"]
                 break
-                case "line":sels=[]
+                case "line":
+                case "arc":sels=[]
             }
             for(var sel of sels){
                 if(nearpoint(pcmd[sel])){
