@@ -36,8 +36,7 @@ function pto(path){
                 break
                 case "m":
                 if(subpath.length)curpath.push(subpath)
-                subpath=[]
-                subpath.start=relative(params)
+                subpath=Object.assign([],{start:relative(params)})
                 opcode="Ll"[+rel]
                 break
                 case "l":
