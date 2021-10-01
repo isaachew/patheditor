@@ -312,7 +312,10 @@ addEventListener("resize",e=>{
 document.getElementById("canvwrapper").addEventListener("keydown",e=>{
     if(e.key=="Backspace"){
         if(curpath[selected.subpath].length){
-            curpath[selected.subpath].splice(selected.command??-1,1)
+            if(selected.selection=="start"){
+                curpath[selected.subpath].start=curpath[selected.subpath][0].to
+            }
+            curpath[selected.subpath].splice(selected.command??0,1)
             if(selected.command){
                 selected.command--
                 selected.selection="to"
