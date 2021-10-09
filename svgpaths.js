@@ -106,7 +106,7 @@ function revsp(subpath){
         newsp.push({type:"quadratic",to:from,control:cmd.control})
         break
         case "arc":
-        newsp.push({type:"arc",to:from,what:what})
+        newsp.push({type:"arc",to:from,rx:cmd.rx,ry:cmd.ry,angle:cmd.angle,large:cmd.large,sweep:!cmd.sweep})
         }
         lc=i.to
     }
