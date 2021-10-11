@@ -79,7 +79,11 @@ function draw(){
     context.fillStyle="red"
     context.strokeStyle="#bbb"
     context.lineWidth=3/view.scale
-    function drawpoint(x,y){context.fillRect(x-2.5/view.scale,y-2.5/view.scale,5/view.scale,5/view.scale)}
+    function drawpoint(x,y){
+        context.beginPath()
+        context.arc(x,y,3/view.scale,3/view.scale,0,7)
+        context.fill()
+    }
     for(let i of curpath){
         let lp=i.start
         drawpoint(...i.start)
