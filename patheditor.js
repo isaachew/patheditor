@@ -353,6 +353,13 @@ document.getElementById("py").addEventListener("input",e=>{
     draw()
 })
 
+document.getElementById("roundall").addEventListener("click",e=>{
+    
+    roundpath(curpath,grprec)
+    
+    
+})
+
 resizeCanvas(innerWidth*2/3,innerHeight)
 cfsels()
 draw()

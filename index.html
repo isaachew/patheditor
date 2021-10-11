@@ -6,7 +6,7 @@
     </head>
     <body>
         <div id="wrapper">
-            <div id="canvwrapper" tabindex="0">
+            <div id="canvwrapper" tabindex="-1">
                 <canvas id="canvas"></canvas>
             </div>
             <div id="sidebar">
@@ -14,6 +14,7 @@
                 Fill <input type="checkbox" oninput="fill=this.checked;draw()"><br>
                 Use even-odd rule instead of nonzero rule <input type="checkbox" oninput="fillrule=this.checked;draw()"><br>
                 Round to nearest: <input type="number" class="num" min="0" oninput="grprec=+this.value">
+                <button id="roundall">Round all</button>
                 <div id="tools">
                     <button onclick="ctool='line'">Line</button>
                     <button onclick="ctool='bezier'">Bezier</button>
@@ -33,3 +34,4 @@
         <script src="patheditor.js"></script>
     </body>
 </html>
+

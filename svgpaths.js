@@ -182,6 +182,31 @@ function otp(path){
     return st
 }
 
+
+function roundpath(path,prec=10){
+    let roundnum=a=>Math.round(a/prec)*prec
+    let roundpoint=p=>[roundnum(p[0]),roundnum(p[1])]
+    for(var i of path){
+        i.start=roundpoint(i.start)
+        for(var j of i){
+            j.to=roundpoint(j.to)
+            switch(j.type){
+                case "bezier":
+                j.c1=roundpoint(j.c1)
+                j.c2=roundpoint(j.c2)
+                break
+                case "quadratic":
+                j.control=roundpoint(j.control)
+                break
+                case "arc":
+                j.rx=roundnum(rx)
+                j.ry=roundnum(ry)
+                j.angle=roundnum(j.angle)
+            }
+        }
+    }
+}
+/*
 function tocc(path){
     let cst="ctx.beginPath()\n"
     for(i of path){
@@ -203,6 +228,7 @@ function tocc(path){
     }
     return cst
 }
+*/
 
 function ptp(path){
     return new Path2D(pto(path))
