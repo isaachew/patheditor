@@ -81,7 +81,7 @@ function draw(){
     context.lineWidth=3/view.scale
     function drawpoint(x,y){
         context.beginPath()
-        context.arc(x,y,3/view.scale,3/view.scale,0,7)
+        context.arc(x,y,3/view.scale,0,7)
         context.fill()
     }
     for(let i of curpath){
