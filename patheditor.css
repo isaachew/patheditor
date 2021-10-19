@@ -19,7 +19,9 @@ body{
     margin:0
 }
 #sidebar{
-    flex-grow:1
+    flex-grow:1;
+    background:#eee;
+    padding:1vw
 }
 
 #tools button{
@@ -40,7 +42,7 @@ body{
     line-height:32px
 }
 #subpaths .selected{
-    background:#eee
+    background:#ddd
 }
 #pathtxt{
     width:90%;
