@@ -24,14 +24,20 @@ body{
     padding:1vw
 }
 
-#tools button{
+button{
     border:1px solid black;
-    background:#bbb
+    border-radius:5px;
+    background:#ddd;
+    transition:background-color 0.25s;
+    padding:5px;
+}
 
+.subpathlist:hover{background:#e3e3e3;}
+
+button:hover{
+    background-color:#bdbdbd
 }
-#tools button:hover{
-    background:#ddd
-}
+
 #subpaths{
     height:200px;
     overflow-y:auto
