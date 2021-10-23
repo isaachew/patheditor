@@ -24,6 +24,13 @@ body{
     padding:1vw
 }
 
+#coordsbar{
+    width:100%;
+    background:#eee;
+    
+    
+}
+
 button{
     border:1px solid black;
     border-radius:5px;
@@ -32,7 +39,9 @@ button{
     padding:5px;
 }
 
-.subpathlist:hover{background:#e3e3e3;}
+.subpathlist:hover{
+    background:#e3e3e3;
+}
 
 button:hover{
     background-color:#bdbdbd

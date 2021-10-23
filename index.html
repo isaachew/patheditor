@@ -7,10 +7,11 @@
     <body>
         <div id="wrapper">
             <div id="canvwrapper" tabindex="-1">
+                <div id="coordsbar"><span id="coords"></span> Width: <span id="scale"></span></div>
+        
                 <canvas id="canvas"></canvas>
             </div>
             <div id="sidebar">
-                <span id="coords"></span> Width: <span id="scale"></span><br>
                 Fill <input type="checkbox" oninput="fill=this.checked;draw()"><br>
                 Use even-odd rule instead of nonzero rule <input type="checkbox" oninput="fillrule=this.checked;draw()"><br>
                 Round to nearest: <input type="number" class="num" min="0" oninput="grprec=+this.value">
