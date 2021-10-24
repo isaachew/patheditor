@@ -352,6 +352,17 @@ document.getElementById("pathtxt").addEventListener("input",e=>{
     
 })
 
+document.getElementById("nonzero").addEventListener("input",e=>{
+    fillrule=false
+    draw()
+})
+
+document.getElementById("evenodd").addEventListener("input",e=>{
+    fillrule=true
+    draw()
+})
+
+
 document.getElementById("pclosed").addEventListener("input",e=>{
     curpath[selected.subpath].closed=e.target.checked
     draw()

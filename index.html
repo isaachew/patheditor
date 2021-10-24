@@ -8,12 +8,14 @@
         <div id="wrapper">
             <div id="canvwrapper" tabindex="-1">
                 <div id="coordsbar"><span id="coords"></span> Width: <span id="scale"></span></div>
-        
+
                 <canvas id="canvas"></canvas>
             </div>
             <div id="sidebar">
                 Fill <input type="checkbox" oninput="fill=this.checked;draw()"><br>
-                Use even-odd rule instead of nonzero rule <input type="checkbox" oninput="fillrule=this.checked;draw()"><br>
+                Fill rule:<br>
+                <input type="radio" id="nonzero" name="fillrule" checked><label for="nonzero">Non-zero winding rule</label><br>
+                <input type="radio" id="evenodd" name="fillrule"><label for="evenodd">Even-odd rule</label><br>
                 Round to nearest: <input type="number" class="num" min="0" oninput="grprec=+this.value">
                 <button id="roundall">Round all</button>
                 <div id="tools">
@@ -24,7 +26,7 @@
 		<button onclick="selected={subpath:~-curpath.push(Object.assign([],{start:[0,0]}))};draw()">Add subpath</button><br>
                 <button onclick="curpath[selected.subpath]=revsp(curpath[selected.subpath]);draw()">Reverse subpath</button><br>
                 <button onclick="curpath.splice(selected.subpath,1);selected={subpath:0};draw()">Delete subpath</button>
-                
+
                 <div id="subpaths"></div>
 		Close subpath <input type="checkbox" id="pclosed"><br>
                 <input type="number" class="num" id="px"><input type="number" class="num" id="py"><br>
@@ -35,4 +37,3 @@
         <script src="patheditor.js"></script>
     </body>
 </html>
-
