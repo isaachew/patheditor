@@ -23,17 +23,17 @@
                     <button onclick="ctool='bezier'">Bezier</button>
                     <button onclick="ctool='quadratic'">Quadratic</button>
                 </div>
-		<button onclick="selected={subpath:~-curpath.push(Object.assign([],{start:[0,0]}))};draw()">Add subpath</button><br>
+                <button onclick="selected={subpath:~-curpath.push(Object.assign([],{start:[0,0]}))};draw()">Add subpath</button><br>
                 <button onclick="curpath[selected.subpath]=revsp(curpath[selected.subpath]);draw()">Reverse subpath</button><br>
                 <button onclick="curpath.splice(selected.subpath,1);selected={subpath:0};draw()">Delete subpath</button>
 
                 <div id="subpaths"></div>
-		Close subpath <input type="checkbox" id="pclosed"><br>
+                Close subpath <input type="checkbox" id="pclosed"><br>
                 <input type="number" class="num" id="px"><input type="number" class="num" id="py"><br>
                 <textarea id="pathtxt"></textarea>
             </div>
         </div>
-	<script src="svgpaths.js"></script>
+        <script src="svgpaths.js"></script>
         <script src="patheditor.js"></script>
     </body>
 </html>

@@ -33,7 +33,7 @@ function pto(path){
         }
         if(cnt==0){
             let lc=subpath.length?subpath[subpath.length-1].to:subpath.start??[0,0]
-             console.log("lc:",lc)
+            console.log("lc:",lc)
             let rel=opcode==opcode.toLowerCase()
             let relx=rel?lc[0]:0,rely=rel?lc[1]:0
             var relative=a=>[a[0]+relx,a[1]+rely]
@@ -79,10 +79,10 @@ function pto(path){
             }
             params=[]
             cnt=plen[opcode.toLowerCase()]
-            
-            
-            
-            
+
+
+
+
         }
     }
     if(subpath.length)curpath.push(subpath)
@@ -118,16 +118,16 @@ function gsr(num){
     if(num==0)return "0"
     if(num%1000==0){
         let tz=0
-        while(num%10==0){tz++,num/=10}        
+        while(num%10==0){tz++,num/=10}
         return num+"e"+tz
     }
     if(num<.001){
         let exp=0
         while((num*10**exp)%1)exp++
         return ""+(num*10**exp)+"e-"+exp
-        
-        
-        
+
+
+
     }
     if(num<1)return (""+num).slice(1)
     return ""+num
@@ -137,7 +137,7 @@ function otp(path){
     var st="",lcu=""
     function anc(a,...p){
         st+=(lcu==a?"":a)
-        
+
         for(var i of p){
             if(i<0){st+="-"+gsr(-i);continue}
             let srep=gsr(i)
@@ -206,29 +206,6 @@ function roundpath(path,prec=10){
         }
     }
 }
-/*
-function tocc(path){
-    let cst="ctx.beginPath()\n"
-    for(i of path){
-        cst+=`ctx.moveTo(${i.start})\n`
-        for(j of i){
-            switch(j.type){
-                case "line":cst+=`ctx.lineTo(${j.to})\n`
-                break
-                case "bezier":cst+=`ctx.bezierCurveTo(${j.c1},${j.c2},${j.to})\n`
-                break
-                case "quadratic":cst+=`ctx.quadraticCurveTo(${j.control},${j.to})\n`
-                break
-            
-            
-            
-            }    
-        }
-        if(cst.closed)cst+="ctx.closePath()\n"
-    }
-    return cst
-}
-*/
 
 function ptp(path){
     return new Path2D(pto(path))
