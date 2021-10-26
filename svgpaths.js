@@ -1,8 +1,7 @@
-function pto(path){
+function toObject(path){
     let numregex=/[+-]?((\d+|0)(\.\d*)?|\.\d+)(e[+-]?\d+)?/g
     let letters="mlhvcsqtaz"
-    path=path.match(new RegExp(`(${numregex.source})|[${letters}]`,"gi"))
-    console.log(path)
+    let tokens=path.match(new RegExp(`(${numregex.source})|[${letters}]`,"gi"))
     let curpath=[]
     let subpath=[]
     subpath.closed=false
@@ -11,9 +10,9 @@ function pto(path){
     let params=[]
     let plen={m:2,l:2,h:1,v:1,c:6,s:4,q:4,t:2,a:7,z:0}
     let i=""
-    for(let ind=0;ind<path.length;){
+    for(let ind=0;ind<tokens.length;){
         if(i==""){
-            i=path[ind++]
+            i=tokens[ind++]
         }
         if(/^[mlhvcsqtaz]/i.test(i)){
             opcode=i[0]
@@ -89,7 +88,7 @@ function pto(path){
     return curpath
 }
 
-function revsp(subpath){
+function reverseSubpath(subpath){
     let newsp=[]
     newsp.start=subpath[subpath.length-1].to
     for(i=subpath.length-1;i>=0;i--){
@@ -133,7 +132,7 @@ function gsr(num){
     return ""+num
 }
 
-function otp(path){
+function toPath(path){
     var st="",lcu=""
     function anc(a,...p){
         st+=(lcu==a?"":a)
@@ -183,7 +182,7 @@ function otp(path){
 }
 
 
-function roundpath(path,prec=10){
+function roundPath(path,prec=10){
     let roundnum=a=>Math.round(a/prec)*prec
     let roundpoint=p=>[roundnum(p[0]),roundnum(p[1])]
     for(var i of path){
@@ -205,8 +204,4 @@ function roundpath(path,prec=10){
             }
         }
     }
-}
-
-function ptp(path){
-    return new Path2D(pto(path))
 }
