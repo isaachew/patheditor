@@ -192,26 +192,25 @@ function toCanvas(path){
     }
     return commands
 }
-
+let roundNum=(num,nearest)=>+(nearest?Math.round(num/nearest)*nearest:num).toFixed(10)
 function roundPath(path,prec=10){
-    let roundnum=a=>Math.round(a/prec)*prec
-    let roundpoint=p=>[roundnum(p[0]),roundnum(p[1])]
+    let roundPoint=p=>[roundNum(p[0],prec),roundNum(p[1],prec)]
     for(var i of path){
-        i.start=roundpoint(i.start)
+        i.start=roundPoint(i.start,prec)
         for(var j of i){
-            j.to=roundpoint(j.to)
+            j.to=roundPoint(j.to,prec)
             switch(j.type){
                 case "bezier":
-                j.c1=roundpoint(j.c1)
-                j.c2=roundpoint(j.c2)
+                j.c1=roundPoint(j.c1)
+                j.c2=roundPoint(j.c2)
                 break
                 case "quadratic":
-                j.control=roundpoint(j.control)
+                j.control=roundPoint(j.control)
                 break
                 case "arc":
-                j.rx=roundnum(rx)
-                j.ry=roundnum(ry)
-                j.angle=roundnum(j.angle)
+                j.rx=roundNum(rx,prec)
+                j.ry=roundNum(ry,prec)
+                j.angle=roundNum(j.angle,prec)
             }
         }
     }

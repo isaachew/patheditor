@@ -152,7 +152,6 @@ function cfsels(){
 
 }
 
-let roundto=(n,r)=>+(r?Math.round(n/r)*r:n).toFixed(10)
 let subpath,selected={subpath:0}
 let mousestate=0
 /*
@@ -215,8 +214,8 @@ canv.addEventListener("mousedown",e=>{
 })
 canv.addEventListener("mousemove",e=>{
     [mcx,mcy]=getmxy(e)
-    mcx=roundto(mcx,grprec)
-    mcy=roundto(mcy,grprec)
+    mcx=roundNum(mcx,grprec)
+    mcy=roundNum(mcy,grprec)
     if(mousestate==1){
         mousestate=2
     }
