@@ -6,7 +6,6 @@ function toObject(path){
     let subpath=[]
     subpath.closed=false
     let opcode=""
-    let cnt=0
     let params=[]
     let plen={m:2,l:2,h:1,v:1,c:6,s:4,q:4,t:2,a:7,z:0}
     let i=""
@@ -15,22 +14,21 @@ function toObject(path){
             i=tokens[ind++]
         }
         if(/^[mlhvcsqtaz]/i.test(i)){
+            //if(params.length)break;//error detected, break
             opcode=i[0]
             i=i.slice(1)
             cnt=plen[opcode.toLowerCase()]
         }else if(opcode.toLowerCase()=="a"&&(cnt==4||cnt==3)){
             params.push(+i[0])
             i=i.slice(1)
-            cnt--
         }else{
             var pint=parseFloat(i)
             i=""
             if(pint==pint){//if not NaN
                 params.push(pint)
-                cnt--
             }
         }
-        if(cnt==0){
+        if(params.length==cnt){
             let lc=subpath.length?subpath[subpath.length-1].to:subpath.start??[0,0]
             console.log("lc:",lc)
             let rel=opcode==opcode.toLowerCase()
