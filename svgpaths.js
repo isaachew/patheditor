@@ -78,10 +78,6 @@ function toObject(path){
             }
             params=[]
             cnt=plen[opcode.toLowerCase()]
-
-
-
-
         }
     }
     if(subpath.length)curpath.push(subpath)
@@ -124,9 +120,6 @@ function gsr(num){
         let exp=0
         while((num*10**exp)%1)exp++
         return ""+(num*10**exp)+"e-"+exp
-
-
-
     }
     if(num<1)return (""+num).slice(1)
     return ""+num
@@ -181,6 +174,26 @@ function toPath(path){
     return st
 }
 
+function toCanvas(path){
+    let commands=[]
+    for(let subpath of path){
+        commands.push({type:"moveTo",params:subpath.start})
+        for(let command of subpath){
+            switch(command.type){
+                case "line":
+                commands.push({type:"lineTo",params:[...command.to]})
+                break
+                case "bezier":
+                commands.push({type:"bezierCurveTo",params:[...command.c1,...command.c2,...command.to]})
+                break
+                case "quadratic":
+                commands.push({type:"quadraticCurveTo",params:[...command.control,...command.to]})
+            }
+        }
+        if(subpath.closed)commands.push({type:"closePath",params:[]})
+    }
+    return commands
+}
 
 function roundPath(path,prec=10){
     let roundnum=a=>Math.round(a/prec)*prec
