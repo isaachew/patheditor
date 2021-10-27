@@ -8,6 +8,7 @@ function toObject(path){
     let opcode=""
     let params=[]
     let plen={m:2,l:2,h:1,v:1,c:6,s:4,q:4,t:2,a:7,z:0}
+    let cnt
     let i=""
     for(let ind=0;ind<tokens.length;){
         if(i==""){
@@ -18,7 +19,7 @@ function toObject(path){
             opcode=i[0]
             i=i.slice(1)
             cnt=plen[opcode.toLowerCase()]
-        }else if(opcode.toLowerCase()=="a"&&(cnt==4||cnt==3)){
+        }else if(opcode.toLowerCase()=="a"&&(params.length==3||params.length==4)){
             params.push(+i[0])
             i=i.slice(1)
         }else{
