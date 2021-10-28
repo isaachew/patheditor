@@ -34,6 +34,7 @@ function toObject(path){
             console.log("lc:",lc)
             let rel=opcode==opcode.toLowerCase()
             let relx=rel?lc[0]:0,rely=rel?lc[1]:0
+            let lcmd=subpath[subpath.length-1]//For use with shorthand Bezier/quadratic curves
             var relative=a=>[a[0]+relx,a[1]+rely]
             console.log((rel?opcode.toLowerCase():opcode)+params)
             switch(opcode.toLowerCase()){
@@ -60,17 +61,15 @@ function toObject(path){
                 subpath.push({type:"bezier",c1:relative([params[0],params[1]]),c2:relative([params[2],params[3]]),to:relative([params[4],params[5]])})
                 break
                 case "s":
-                var lcmd=subpath[subpath.length-1]
-                var lbcc=lcmd.type=="bezier"?lcmd.c2:lc
-                subpath.push({type:"bezier",c1:[2*lc[0]-lbcc[0],2*lc[1]-lbcc[1]],c2:relative([params[0],params[1]]),to:relative([params[2],params[3]])})
+                var lastControl=lcmd.type=="bezier"?lcmd.c2:lc
+                subpath.push({type:"bezier",c1:[2*lc[0]-lastControl[0],2*lc[1]-lastControl[1]],c2:relative([params[0],params[1]]),to:relative([params[2],params[3]])})
                 break
                 case "q":
                 subpath.push({type:"quadratic",control:relative([params[0],params[1]]),to:relative([params[2],params[3]])})
                 break
                 case "t":
-                var lcmd=subpath[subpath.length-1]
-                var lbcc=lcmd.type=="quadratic"?lcmd.control:lc
-                subpath.push({type:"quadratic",control:[2*lc[0]-lbcc[0],2*lc[1]-lbcc[1]],to:relative([params[0],params[1]])})
+                var lastControl=lcmd.type=="quadratic"?lcmd.control:lc
+                subpath.push({type:"quadratic",control:[2*lc[0]-lastControl[0],2*lc[1]-lastControl[1]],to:relative([params[0],params[1]])})
                 break
                 case "a":
                 subpath.push({type:"arc",rx:params[0],ry:params[1],angle:params[2],large:!!params[3],sweep:!!params[4],to:relative([params[5],params[6]])})
@@ -193,6 +192,55 @@ function toCanvas(path){
     }
     return commands
 }
+
+function fromCanvas(commands){
+    let path=[]
+    let subpath=[]
+    for(let i of commands){
+        switch(i.type){
+            case "closePath":
+            subpath.closed=true
+            if(subpath.length){
+                path.push(subpath)
+            }
+            subpath=Object.assign([],{start:subpath.start})
+            break
+            case "moveTo":
+            if(subpath.length){
+                path.push(subpath)
+            }
+            subpath=Object.assign([],{start:i.params})
+            break
+            case "lineTo":
+            subpath.push({type:"line",to:i.params})
+            break
+            case "bezierCurveTo":
+            subpath.push({type:"bezier",c1:i.params.slice(0,2),c2:i.params.slice(2,4),to:i.params.slice(4)})
+            break
+            case "quadraticCurveTo":
+            subpath.push({type:"quadratic",control:i.params.slice(0,2),to:i.params.slice(2)})
+            break
+            case "arc":
+            break
+            case "arcTo":
+            break
+            case "ellipse":
+            break
+            case "rect":
+            let [x,y,wid,hei]=i.params
+            let rectpath=[]
+            rectpath.start=[x,y]
+            rectpath.push({type:"line",to:[x+wid,y]})
+            rectpath.push({type:"line",to:[x+wid,y+hei]})
+            rectpath.push({type:"line",to:[x,y+hei]})
+            rectpath.closed=true
+            path.push(rectpath)
+        }
+    }
+    if(subpath.length)path.push(subpath)
+    return path
+}
+
 let roundNum=(num,nearest)=>+(nearest?Math.round(num/nearest)*nearest:num).toFixed(10)
 function roundPath(path,prec=10){
     let roundPoint=p=>[roundNum(p[0],prec),roundNum(p[1],prec)]
