@@ -82,6 +82,53 @@ function toObject(path){
     return curpath
 }
 
+class SVGPath{
+    constructor(){
+        if(arguments.length==0)this.subpaths=[]
+        else{
+            this.subpaths=toObject(arguments[0])
+        }
+    }
+    currentSubpath(){return this.subpaths[this.subpaths.length-1]}
+    closePath(){
+        let lastSubpath=this.currentSubpath()
+        if(lastSubpath&&lastSubpath.length==0)this.subpaths.pop()
+        else lastSubpath.closed=true
+        this.subpaths.push(Object.assign([],{start:lastSubpath.start}))
+    }
+    moveTo(x,y){
+        let lastSubpath=this.currentSubpath()
+        if(lastSubpath&&lastSubpath.length==0)this.subpaths.pop()
+        this.subpaths.push(Object.assign([],{start:[x,y]}))
+    }
+    lineTo(x,y){
+        this.currentSubpath().push({type:"line",to:[x,y]})
+    }
+    bezierCurveTo(c1x,c1y,c2x,c2y,x,y){
+        this.currentSubpath().push({type:"bezier",c1:[c1x,c1y],c2:[c2x,c2y],to:[x,y]})
+    }
+    quadraticCurveTo(cx,cy,x,y){
+        this.currentSubpath().push({type:"quadratic",control:[cx,cy],to:[x,y]})
+    }
+    arc(x,y,r,start,end,sweep){
+
+    }
+    arcTo(x1,y1,x2,y2,r){
+
+    }
+    ellipse(x,y,rx,ry,rot,start,end,sweep){
+
+    }
+    rect(x,y,w,h){
+        let rectpath=Object.assign([],{start:[x,y]})
+        rectpath.push({type:"line",to:[x+w,y]})
+        rectpath.push({type:"line",to:[x+w,y+h]})
+        rectpath.push({type:"line",to:[x,y+h]})
+        rectpath.closed=true
+        this.subpaths.push(rectpath)
+    }
+}
+
 function reverseSubpath(subpath){
     let newsp=[]
     newsp.start=subpath[subpath.length-1].to
