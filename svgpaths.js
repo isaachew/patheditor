@@ -86,7 +86,20 @@ class SVGPath{
     constructor(){
         if(arguments.length==0)this.subpaths=[]
         else{
-            this.subpaths=toObject(arguments[0])
+            let farg=arguments[0]
+            if(farg instanceof SVGPath){
+                this.subpaths=[]
+                for(let i of farg.subpaths){
+                    let nsub=[]
+                    for(let command of i){
+                        nsub.push(Object.assign({},command))
+                    }
+                    nsub.start=i.start
+                    this.subpaths.push(nsub)
+                }
+            }else{
+                this.subpaths=toObject(farg)
+            }
         }
     }
     currentSubpath(){return this.subpaths[this.subpaths.length-1]}
