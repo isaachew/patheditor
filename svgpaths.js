@@ -90,24 +90,33 @@ class SVGPath{
         }
     }
     currentSubpath(){return this.subpaths[this.subpaths.length-1]}
+    createPoint(x,y){this.subpaths.push(Object.assign([],{start:[x,y]}))}
+    createPointIfNeeded(x,y){
+        if(!this.subpaths.length){
+            this.createPoint(x,y)
+        }
+    }
     closePath(){
         let lastSubpath=this.currentSubpath()
         if(lastSubpath&&lastSubpath.length==0)this.subpaths.pop()
         else lastSubpath.closed=true
-        this.subpaths.push(Object.assign([],{start:lastSubpath.start}))
+        this.createPoint(...lastSubpath.start)
     }
     moveTo(x,y){
         let lastSubpath=this.currentSubpath()
         if(lastSubpath&&lastSubpath.length==0)this.subpaths.pop()
-        this.subpaths.push(Object.assign([],{start:[x,y]}))
+        this.createPoint(x,y)
     }
     lineTo(x,y){
+        this.createPointIfNeeded(x,y)
         this.currentSubpath().push({type:"line",to:[x,y]})
     }
     bezierCurveTo(c1x,c1y,c2x,c2y,x,y){
+        this.createPointIfNeeded(x,y)
         this.currentSubpath().push({type:"bezier",c1:[c1x,c1y],c2:[c2x,c2y],to:[x,y]})
     }
     quadraticCurveTo(cx,cy,x,y){
+        this.createPointIfNeeded(x,y)
         this.currentSubpath().push({type:"quadratic",control:[cx,cy],to:[x,y]})
     }
     arc(x,y,r,start,end,sweep){
@@ -120,12 +129,18 @@ class SVGPath{
 
     }
     rect(x,y,w,h){
+        let lastSubpath=this.currentSubpath()
+        if(lastSubpath&&lastSubpath.length==0)this.subpaths.pop()
         let rectpath=Object.assign([],{start:[x,y]})
         rectpath.push({type:"line",to:[x+w,y]})
         rectpath.push({type:"line",to:[x+w,y+h]})
         rectpath.push({type:"line",to:[x,y+h]})
         rectpath.closed=true
         this.subpaths.push(rectpath)
+        this.createPoint(x,y)
+    }
+    toSVGPathString(){
+        return toPath(this.subpaths)
     }
 }
 
