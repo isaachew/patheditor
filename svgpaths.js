@@ -155,6 +155,9 @@ class SVGPath{
     toSVGPathString(){
         return toPath(this.subpaths)
     }
+    toPath2D(){
+        return new Path2D(this.toSVGPathString())
+    }
 }
 
 function reverseSubpath(subpath){
