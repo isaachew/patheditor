@@ -132,7 +132,20 @@ class SVGPath{
         this.createPointIfNeeded(x,y)
         this.currentSubpath().push({type:"quadratic",control:[cx,cy],to:[x,y]})
     }
-    arc(x,y,r,start,end,sweep){
+    arc(x,y,r,start,end,anticlockwise){
+        if(!anticlockwise)anticlockwise=0
+
+        let curSubpath=this.currentSubpath()
+
+        let startPoint=[Math.cos(start)*r+x,Math.sin(start)*r+y]
+        let endPoint=[Math.cos(end)*r+x,Math.sin(end)*r+y]
+        this.createPointIfNeeded(...startPoint)
+
+        let curPoint=curSubpath.length?curSubpath[curSubpath.length-1].to:lastSubpath.start
+        if(startPoint[0]!=curPoint[0]||startPoint[1]!=curPoint[1])this.lineTo(startPoint[0],startPoint[1])
+
+        let totalang=anticlockwise?start-end:end-start
+        curSubpath.push({type:"arc",rx:r,ry:r,angle:0,large:totalang>Math.PI,sweep:!anticlockwise,to:endPoint})
 
     }
     arcTo(x1,y1,x2,y2,r){
