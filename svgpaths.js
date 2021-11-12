@@ -132,8 +132,7 @@ class SVGPath{
         this.createPointIfNeeded(x,y)
         this.currentSubpath().push({type:"quadratic",control:[cx,cy],to:[x,y]})
     }
-    arc(x,y,r,start,end,anticlockwise){
-        if(!anticlockwise)anticlockwise=0
+    arc(x,y,r,start,end,anticlockwise=false){
 
         let curSubpath=this.currentSubpath()
 
@@ -164,8 +163,29 @@ class SVGPath{
         let cy=-(r*(a1*hyp(a2,b2)-a2*hyp(a1,b1))+(c2*a1-c1*a2))/(a1*b2-a2*b1)
         this.arc(cx,cy,r,Math.atan2(x1-curPoint[0],curPoint[1]-y1),Math.atan2(x2-x1,y1-y2),1)
     }
-    ellipse(x,y,rx,ry,rot,start,end,sweep){
+    ellipse(x,y,rx,ry,angle,start,end,anticlockwise=false){
 
+        let curSubpath=this.currentSubpath()
+
+        let startPoint=[Math.cos(start)*rx,Math.sin(start)*ry]
+        startPoint=[
+            startPoint[0]*Math.cos(angle)-startPoint[1]*Math.sin(angle)+x,
+            startPoint[0]*Math.sin(angle)+startPoint[1]*Math.cos(angle)+y
+        ]
+        let endPoint=[Math.cos(end)*rx,Math.sin(end)*ry]
+        endPoint=[
+            endPoint[0]*Math.cos(angle)-endPoint[1]*Math.sin(angle)+x,
+            endPoint[0]*Math.sin(angle)+endPoint[1]*Math.cos(angle)+y
+        ]
+        this.createPointIfNeeded(...startPoint)
+
+        let curPoint=curSubpath.length?curSubpath[curSubpath.length-1].to:curSubpath.start
+        if(startPoint[0]!=curPoint[0]||startPoint[1]!=curPoint[1])this.lineTo(startPoint[0],startPoint[1])
+
+        let totalang=anticlockwise?start-end:end-start
+
+        angle*=180/Math.PI
+        curSubpath.push({type:"arc",rx,ry,angle,large:totalang>Math.PI,sweep:!anticlockwise,to:endPoint})
     }
     rect(x,y,w,h){
         let lastSubpath=this.currentSubpath()
