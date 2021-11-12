@@ -141,7 +141,7 @@ class SVGPath{
         let endPoint=[Math.cos(end)*r+x,Math.sin(end)*r+y]
         this.createPointIfNeeded(...startPoint)
 
-        let curPoint=curSubpath.length?curSubpath[curSubpath.length-1].to:lastSubpath.start
+        let curPoint=curSubpath.length?curSubpath[curSubpath.length-1].to:curSubpath.start
         if(startPoint[0]!=curPoint[0]||startPoint[1]!=curPoint[1])this.lineTo(startPoint[0],startPoint[1])
 
         let totalang=anticlockwise?start-end:end-start
@@ -150,6 +150,19 @@ class SVGPath{
     }
     arcTo(x1,y1,x2,y2,r){
 
+        let curSubpath=this.currentSubpath()
+        let curPoint=curSubpath.length?curSubpath[curSubpath.length-1].to:curSubpath.start
+
+        let a1=curPoint[1]-y1
+        let b1=x1-curPoint[0]
+        let c1=-(a1*x1+b1*y1)
+        let a2=y1-y2
+        let b2=x2-x1
+        let c2=-(a2*x1+b2*y1)
+        let hyp=Math.hypot
+        let cx=(r*(b1*hyp(a2,b2)-b2*hyp(a1,b1))+(c2*b1-c1*b2))/(a1*b2-a2*b1)
+        let cy=-(r*(a1*hyp(a2,b2)-a2*hyp(a1,b1))+(c2*a1-c1*a2))/(a1*b2-a2*b1)
+        this.arc(cx,cy,r,Math.atan2(x1-curPoint[0],curPoint[1]-y1),Math.atan2(x2-x1,y1-y2),1)
     }
     ellipse(x,y,rx,ry,rot,start,end,sweep){
 
