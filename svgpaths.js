@@ -198,6 +198,32 @@ class SVGPath{
         this.subpaths.push(rectpath)
         this.createPoint(x,y)
     }
+
+    transform(...args){
+        let mat
+        if(args.length==6){
+            let [a,b,c,d,e,f]=args
+            mat={a,b,c,d,e,f}
+        }
+        function execTransform(p){
+            [p[0],p[1]]=[mat.a*p[0]+mat.b*p[1]+mat.e,mat.c*p[0]+mat.d*p[1]+mat.f]
+        }
+        for(let i of this.subpaths){
+            execTransform(i.start)
+            for(let j of i){
+                execTransform(j.to)
+                switch(j.type){
+                    case "bezier":
+                    execTransform(j.c1)
+                    execTransform(j.c2)
+                    break
+                    case "quadratic":
+                    execTransform(j.control)
+                }
+            }
+        }
+    }
+
     toSVGPathString(){
         return toPath(this.subpaths)
     }
