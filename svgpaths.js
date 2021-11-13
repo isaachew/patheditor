@@ -95,6 +95,7 @@ class SVGPath{
                         nsub.push(Object.assign({},command))
                     }
                     nsub.start=i.start
+                    nsub.closed=i.closed
                     this.subpaths.push(nsub)
                 }
             }else{
@@ -206,24 +207,33 @@ class SVGPath{
             mat={a,b,c,d,e,f}
         }
         function execTransform(p){
-            [p[0],p[1]]=[mat.a*p[0]+mat.b*p[1]+mat.e,mat.c*p[0]+mat.d*p[1]+mat.f]
+            return [mat.a*p[0]+mat.b*p[1]+mat.e,mat.c*p[0]+mat.d*p[1]+mat.f]
         }
         for(let i of this.subpaths){
-            execTransform(i.start)
+            i.start=execTransform(i.start)
             for(let j of i){
-                execTransform(j.to)
+                j.to=execTransform(j.to)
                 switch(j.type){
                     case "bezier":
-                    execTransform(j.c1)
-                    execTransform(j.c2)
+                    j.c1=execTransform(j.c1)
+                    j.c2=execTransform(j.c2)
                     break
                     case "quadratic":
-                    execTransform(j.control)
+                    j.control=execTransform(j.control)
+                    break
+                    case "arc":
+                    //todo
                 }
             }
         }
     }
 
+    addPath(path,transform){
+        let lastSubpath=this.currentSubpath()
+        if(lastSubpath&&lastSubpath.length==0&&path.subpaths.length)this.subpaths.pop()
+        if(transform)path.transform(transform)
+        this.subpaths.push(...new SVGPath(path).subpaths)
+    }
     toSVGPathString(){
         return toPath(this.subpaths)
     }
