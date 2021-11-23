@@ -82,6 +82,32 @@ function toObject(path){
     return curpath
 }
 
+function rotatePoint(x,y,rot){
+    return [x*Math.cos(rot)-y*Math.sin(rot),y*Math.cos(rot)+x*Math.sin(rot)]
+}
+function getEllipseParams(x1,y1,x2,y2,rx,ry,angle,axs){
+    let rot=angle*Math.PI/180
+    let [x1r,y1r]=rotatePoint(x1,y1,-rot)//rotate so ellipse is aligned
+    let [x2r,y2r]=rotatePoint(x2,y2,-rot);
+    [x1t,y1t]=[(x2r-x1r)/2,(y2r-y1r)/2]//set origin to average
+
+    let [rxs,rys]=[rx*rx,ry*ry]
+    let [x1s,y1s]=[x1t*x1t,y1t*y1t]
+    let sf=1;
+    let val=(rxs*rys-rxs*y1s-rys*x1s)/(rxs*y1s+rys*x1s)//calculation
+    if(val<0){
+        sf=Math.sqrt(x1s/rxs+y1s/rys)
+        val=0
+    }
+    val=Math.sqrt(val);
+    if(axs)val=-val
+    let [cx,cy]=[val*y1t*rx/ry,-val*x1t*ry/rx];//reset origin
+
+    [cx,cy]=[cx+(x1r+x2r)/2,cy+(y1r+y2r)/2];
+    [cx,cy]=rotatePoint(cx,cy,rot)
+    return {cx,cy,sf}
+}
+
 class SVGPath{
     constructor(){
         if(arguments.length==0)this.subpaths=[]
