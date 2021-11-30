@@ -103,10 +103,11 @@ function getEllipseParams(x1,y1,x2,y2,rx,ry,angle,axs){
     val=Math.sqrt(val);
     if(axs)val=-val
     let [cx,cy]=[val*y1t*rx/ry,-val*x1t*ry/rx];//reset origin
-
+    let startRot=Math.atan2((y1t-cy)/ry,(x1t-cx)/rx)
+    let endRot=Math.atan2((-y1t-cy)/ry,(-x1t-cx)/rx);
     [cx,cy]=[cx+(x1r+x2r)/2,cy+(y1r+y2r)/2];
     [cx,cy]=rotatePoint(cx,cy,rot)
-    return {cx,cy,sf}
+    return {cx,cy,sf,startRot,endRot}
 }
 
 class SVGPath{
@@ -373,6 +374,11 @@ function toCanvas(path){
                 break
                 case "quadratic":
                 commands.push({type:"quadraticCurveTo",params:[...command.control,...command.to]})
+                break
+                case "arc":
+                let startPoint=commands[commands.length-1]?.to||commands.start
+                let coords=getEllipseParams(...startPoint,...command.to,command.rx,command.ry,command.angle,command.large^command.sweep)
+                commands.push({type:"arc",params:[coords.cx,coords.cy,coords.sf*command.rx,coords.sf*command.ry,command.angle,command.sweep]})
             }
         }
         if(subpath.closed)commands.push({type:"closePath",params:[]})
