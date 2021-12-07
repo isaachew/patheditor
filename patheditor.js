@@ -101,6 +101,21 @@ function draw(){
 
 
 
+            }else if(j.type=="arc"){
+                let params=getEllipseParams(...lp,...j.to,j.rx,j.ry,j.angle,j.large^j.sweep)
+                context.beginPath()
+                drawpoint(params.cx,params.cy)
+                context.ellipse(params.cx,params.cy,j.rx*params.sf,j.ry*params.sf,j.angle*Math.PI/180,params.startAngle,params.endAngle)
+                context.stroke()
+
+                let [mx,my]=rotatePoint(j.rx*params.sf,0,j.angle*Math.PI/180)
+                context.moveTo(mx+params.cx,my+params.cy)
+                context.lineTo(params.cx-mx,params.cy-my);
+
+                [mx,my]=rotatePoint(0,j.ry*params.sf,j.angle*Math.PI/180)
+                context.moveTo(mx+params.cx,my+params.cy)
+                context.lineTo(params.cx-mx,params.cy-my)
+                context.stroke()
             }
             //context.fillRect(j.c1[0]-2.5,j.c1[1]-2.5,5,5)
             //context.fillRect(j.c2[0]-2.5,j.c2[1]-2.5,5,5)
