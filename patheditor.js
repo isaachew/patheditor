@@ -105,7 +105,7 @@ function draw(){
                 let params=getEllipseParams(...lp,...j.to,j.rx,j.ry,j.angle,j.large^j.sweep)
                 context.beginPath()
                 drawpoint(params.cx,params.cy)
-                context.ellipse(params.cx,params.cy,j.rx*params.sf,j.ry*params.sf,j.angle*Math.PI/180,params.startAngle,params.endAngle)
+                context.ellipse(params.cx,params.cy,j.rx*params.sf,j.ry*params.sf,j.angle*Math.PI/180,params.startAngle,params.endAngle,!j.sweep)
                 context.stroke()
 
                 let [mx,my]=rotatePoint(j.rx*params.sf,0,j.angle*Math.PI/180)
